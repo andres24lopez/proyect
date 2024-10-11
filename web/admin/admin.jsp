@@ -11,7 +11,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <style>
             body { 
-                background-image: url('img/7.jpg');
+                background-image: url('../img/7.jpg');
                 background-size: cover;
                 background-position: center;
                 background-repeat: no-repeat;
@@ -75,23 +75,27 @@
                   <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                       <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.jsp">INICIO</a>
+                        <a class="nav-link active" aria-current="page" href="bienvenida.jsp">Administrador</a>
                       </li>
-                      
-                      <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">MENU</a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <li><a class="dropdown-item" href="#">Empleados</a></li>
-                          <li><a class="dropdown-item" href="#">Clientes</a></li>
-                          <li><hr class="dropdown-divider"></li>
-                          <li><a class="dropdown-item" href="#">Puestos</a></li>
-                        </ul>
+                      <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="inventario.jsp">Inventario</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="usuarios.jsp">Usuarios</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="empleados.jsp">Empleados</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="ventas.jsp">Ventas</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="compras.jsp">Compras</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="proveedores.jsp">Proveedores</a>
                       </li>
                     </ul>
-                    <form class="d-flex">
-                      <input class="form-control me-2" type="search" placeholder="" aria-label="Search">
-                      <button class="btn btn-outline-success" type="submit">BUSCAR</button>
-                    </form>
                   </div>
                 </div>
               </nav>
