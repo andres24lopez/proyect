@@ -96,7 +96,7 @@
                             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_emp", "root", "danigero");
 
                             // Consulta para obtener los datos del usuario
-                            String sql = "SELECT id, password, attempts, lock_time FROM users WHERE username = ?";
+                            String sql = "SELECT id, password, attempts, lock_time, mec FROM users WHERE username = ?";
                             stmt = conn.prepareStatement(sql);
                             stmt.setString(1, username);
                             rs = stmt.executeQuery();
@@ -105,20 +105,28 @@
                                 String dbPassword = rs.getString("password");
                                 int attempts = rs.getInt("attempts");
                                 Timestamp lockTime = rs.getTimestamp("lock_time");
+                                String role = rs.getString("mec");
 
                                 long currentTimeMillis = System.currentTimeMillis();
                                 boolean locked = false;
 
                                 if (lockTime != null && (currentTimeMillis - lockTime.getTime()) < 300000) {
                                     // Usuario bloqueado por menos de 5 minutos
-                                    out.println("<p style='color:red;'>Too many failed attempts. Try again after 5 minutes.</p>");
+                                    out.println("<p style='color:red;'>Tienes varios intentos Fallidos. Por favor esperar 5 minutos.</p>");
                                     locked = true;
                                 }
 
                                 if (!locked) {
                                     // Verificar si la contraseña es correcta
                                     if (password.equals(dbPassword)) {
-                                        response.sendRedirect("admin/admin.jsp");
+                                        // Redirigir según el rol del usuario
+                                        if (role.equalsIgnoreCase("admin")) {
+                                            response.sendRedirect("admin/Administrador/inventario.jsp");
+                                        } else if (role.equalsIgnoreCase("empleado")) {
+                                            response.sendRedirect("admin/Empleado/admin.jsp");
+                                        } else if (role.equalsIgnoreCase("cliente")) {
+                                            response.sendRedirect("admin/cliente.jsp");
+                                        }
 
                                         // Restablecer intentos fallidos
                                         String resetAttemptsSql = "UPDATE users SET attempts = 0, lock_time = NULL WHERE username = ?";
