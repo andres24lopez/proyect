@@ -11,6 +11,7 @@
     <servlet-mapping>
         <servlet-name>sr_productos</servlet-name>
         <url-pattern>/admin/Empleado/sr_productos</url-pattern>
+        <url-pattern>/admin/Administrador/sr_productos</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>sr_producto</servlet-name>

@@ -1,13 +1,18 @@
 package controlador;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate; // Import para manejar LocalDate
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 import modelo.productos;
 
+@MultipartConfig
 public class sr_productos extends HttpServlet {
 
     productos producto;
@@ -15,82 +20,118 @@ public class sr_productos extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
-        // Imprimir parámetros recibidos en consola para depuración
-        System.out.println("ID Producto: " + request.getParameter("txt_idProducto"));
-        System.out.println("Producto: " + request.getParameter("txt_producto"));
-        System.out.println("ID Marca: " + request.getParameter("txt_idMarca"));
-        System.out.println("Descripción: " + request.getParameter("txt_descripcion"));
-        System.out.println("Imagen: " + request.getParameter("txt_imagen"));
-        System.out.println("Precio Costo: " + request.getParameter("txt_precio_costo"));
-        System.out.println("Precio Venta: " + request.getParameter("txt_precio_venta"));
-        System.out.println("Existencia: " + request.getParameter("txt_existencia"));
-        System.out.println("Fecha Ingreso: " + request.getParameter("txt_fecha_ingreso"));
-
         try (PrintWriter out = response.getWriter()) {
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet Productos</title>");            
+            out.println("</head>");
+            out.println("<body>");
 
-            // Crear objeto producto con los parámetros recibidos
+            // Procesar la imagen si se sube
+            Part filePart = request.getPart("file_imagen"); // Obtiene el archivo de imagen
+            String fileName = getFileName(filePart); // Obtiene el nombre del archivo
+
+            // Definir ruta donde se guardará el archivo (esto se usa solo para el almacenamiento físico)
+            String uploadPath = getServletContext().getRealPath("/admin/img_producto") + File.separator + fileName;
+            File file = new File(uploadPath);
+            filePart.write(uploadPath); // Guardar la imagen en el servidor
+            
+            // Obtener datos del formulario
+            int id = Integer.parseInt(request.getParameter("txt_idProducto"));
+            String productoNombre = request.getParameter("txt_producto");
+            int idMarca = Integer.parseInt(request.getParameter("drop_marca"));
+            String descripcion = request.getParameter("txt_descripcion");
+            double precioCosto = Double.parseDouble(request.getParameter("txt_precio_costo"));
+            double precioVenta = Double.parseDouble(request.getParameter("txt_precio_venta"));
+            int existencia = Integer.parseInt(request.getParameter("txt_existencia"));
+            String fecha = request.getParameter("txt_fecha_ingreso");
+            // Crear objeto producto con los datos recibidos del formulario
             producto = new productos(
-                    Integer.parseInt(request.getParameter("txt_idProducto")),
-                    request.getParameter("txt_producto"),
-                    Integer.parseInt(request.getParameter("txt_idMarca")),
-                    request.getParameter("txt_descripcion"),
-                    request.getParameter("txt_imagen"),
-                    Double.parseDouble(request.getParameter("txt_precio_costo")),
-                    Double.parseDouble(request.getParameter("txt_precio_venta")),
-                    Integer.parseInt(request.getParameter("txt_existencia")),
-                    request.getParameter("txt_fecha_ingreso")
+                    productoNombre,
+                    idMarca,
+                    descripcion,
+                    fileName, // Solo el nombre del archivo, no la ruta
+                    precioCosto,
+                    precioVenta,
+                    existencia,
+                    fecha // Usar la fecha actual como fecha de ingreso
             );
 
-            // Acción para agregar
+            System.out.println(id);
+            System.out.println(productoNombre);
+            System.out.println(idMarca);
+            System.out.println(descripcion);
+            System.out.println(fileName);
+            System.out.println(precioCosto);
+            System.out.println(precioVenta);
+            System.out.println(existencia);
+
+            
+            
+            
+            // Botón agregar
             if ("agregar".equals(request.getParameter("btn_agregar"))) {
                 if (producto.agregar() > 0) {
                     response.sendRedirect("inventario.jsp");
                 } else {
-                    out.println("<h1> xxxxxxx No se Ingresó el producto xxxxxxxxxxxx </h1>");
-                    out.println("<a href='inventario.jsp'>Regresar...</a>");
+                    out.println("<h1> xxxxxxx No se Ingreso xxxxxxxxxxxx </h1>");
+                    out.println("<a href='index.jsp'>Regresar...</a>");
                 }
             }
 
-            // Acción para modificar
+            // Botón modificar
             if ("modificar".equals(request.getParameter("btn_modificar"))) {
                 if (producto.modificar() > 0) {
                     response.sendRedirect("inventario.jsp");
                 } else {
-                    out.println("<h1> xxxxxxx No se Modificó el producto xxxxxxxxxxxx </h1>");
-                    out.println("<a href='inventario.jsp'>Regresar...</a>");
+                    out.println("<h1> xxxxxxx No se Modifico xxxxxxxxxxxx </h1>");
+                    out.println("<a href='index.jsp'>Regresar...</a>");
                 }
             }
 
-            // Acción para eliminar
+            // Botón eliminar
             if ("eliminar".equals(request.getParameter("btn_eliminar"))) {
-                if (producto.eliminar() > 0) {
+                if (producto.eliminar(id) > 0) {
                     response.sendRedirect("inventario.jsp");
                 } else {
-                    out.println("<h1> xxxxxxx No se Eliminó el producto xxxxxxxxxxxx </h1>");
-                    out.println("<a href='inventario.jsp'>Regresar...</a>");
+                    out.println("<h1> xxxxxxx No se Elimino xxxxxxxxxxxx </h1>");
+                    out.println("<a href='index.jsp'>Regresar...</a>");
                 }
             }
+
+            out.println("</body>");
+            out.println("</html>");
         }
     }
 
-    // Método doGet
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    // Método doPost
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    // Información del servlet
     @Override
     public String getServletInfo() {
-        return "Servlet para la gestión de productos";
+        return "Short description";
+    }
+    // </editor-fold>
+
+    // Método para obtener el nombre del archivo
+    private String getFileName(Part filePart) {
+        String contentDisposition = filePart.getHeader("content-disposition");
+        for (String cd : contentDisposition.split(";")) {
+            if (cd.trim().startsWith("filename")) {
+                return cd.substring(cd.indexOf('=') + 1).trim().replace("\"", "");
+            }
+        }
+        return null;
     }
 }
