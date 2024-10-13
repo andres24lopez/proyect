@@ -1,5 +1,8 @@
 <%@page import="java.sql.*" %>
 <%@page import="modelo.productos" %>
+<%@page import="modelo.Marca" %>
+<%@page import="java.util.HashMap" %>
+<%@page import="javax.swing.table.DefaultTableModel" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
@@ -44,6 +47,8 @@
             padding: 20px;
             z-index: 1000; /* Asegura que esté por encima de otros elementos */
             display: none; /* Ocultar por defecto */
+            overflow-y: auto; /* Habilita el scroll vertical */
+            overflow-x: hidden; /* Oculta el scroll horizontal para evitar desplazamiento lateral */
         }
 
         .sidebar h3 {
@@ -104,6 +109,23 @@
             height: auto; /* Mantener la proporción de la imagen */
             margin: 0 80px 40px; /* Margen superior e inferior, margen izquierdo y derecho */
         }
+        
+        h3 {
+            color: white; /* Cambia el color del texto */
+            font-size: 42px; /* Cambia el tamaño de la fuente */
+            font-weight: bold; /* Cambia el grosor de la fuente */
+            text-align: center; /* Centra el texto (opcional) */
+            margin: 10px 0; /* Margen superior e inferior (opcional) */
+        }
+        
+        .center-button {
+            display: block; /* Hace que el botón sea un bloque */
+            margin: 0 auto; /* Margen automático para centrar horizontalmente */
+            font-size: 30px; /* Tamaño de la letra */
+            font-weight: bold; /* Grosor de la letra */
+            color: white; /* Color de la letra */
+            background-color: #17a2b8; /* Color de fondo (el mismo que btn-info) */
+        }
     </style>
 </head>
 <body>
@@ -133,7 +155,15 @@
                         <li><a class="dropdown-item" href="ventasDetalle.jsp">Detalle de Ventas</a></li>
                     </ul>
                 </div>
-                <a class="nav-link active" href="adminUsuarios.jsp"><h2>Administración de Usuarios</h2></a>
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle" id="detalleDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <h2>Usuarios</h2>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="detalleDropdown">
+                        <li><a class="dropdown-item" href="usuarios_clientes.jsp">Usuario Cliente</a></li>
+                        <li><a class="dropdown-item" href="usuarios_empleados.jsp">Usuario Empleado</a></li>
+                    </ul>
+                </div>
                 <a class="nav-link active" href="reportes.jsp"><h2>Reportes</h2></a>
             </nav>
         </div>
