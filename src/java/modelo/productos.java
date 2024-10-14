@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import javax.swing.table.DefaultTableModel;
-import java.sql.Date; // Import para convertir fechas a SQL
 
 public class productos {
     private int idProducto;
@@ -15,7 +14,7 @@ public class productos {
     private double precio_costo;
     private double precio_venta;
     private int existencia;
-    conexion conexionDB;
+    private conexion conexionDB;
 
     public productos() {}
 
@@ -53,7 +52,7 @@ public class productos {
         this.precio_venta = precio_venta;
         this.existencia = existencia;
     }
-
+    
     // Getters y Setters
     public int getIdProducto() {
         return idProducto;
@@ -95,19 +94,19 @@ public class productos {
         this.imagen = imagen;
     }
 
-    public double getPrecio_costo() {
+    public double getPrecioCosto() {
         return precio_costo;
     }
 
-    public void setPrecio_costo(double precio_costo) {
+    public void setPrecioCosto(double precio_costo) {
         this.precio_costo = precio_costo;
     }
 
-    public double getPrecio_venta() {
+    public double getPrecioVenta() {
         return precio_venta;
     }
 
-    public void setPrecio_venta(double precio_venta) {
+    public void setPrecioVenta(double precio_venta) {
         this.precio_venta = precio_venta;
     }
 
@@ -121,9 +120,8 @@ public class productos {
 
     // Método para agregar productos
     public int agregar() {
-        String rutaImagen = "/admin/img_producto/";
         int retorno = 0;
-        PreparedStatement parametro;
+        PreparedStatement parametro = null;
         try {
             conexionDB = new conexion();
             conexionDB.abrir_conexion();
@@ -133,14 +131,15 @@ public class productos {
             parametro.setString(1, getProducto());
             parametro.setInt(2, getIdMarca());
             parametro.setString(3, getDescripcion());
-            parametro.setString(4, getImagen()); // Asignar la ruta de la imagen
-            parametro.setDouble(5, getPrecio_costo());
-            parametro.setDouble(6, getPrecio_venta());
+            parametro.setString(4, getImagen());
+            parametro.setDouble(5, getPrecioCosto());
+            parametro.setDouble(6, getPrecioVenta());
             parametro.setInt(7, getExistencia());
             retorno = parametro.executeUpdate();
-            conexionDB.cerrar_conexion();
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+            System.err.println("Error al agregar producto: " + ex.getMessage());
+        } finally {
+            closeResources(parametro);
         }
         return retorno;
     }
@@ -158,8 +157,8 @@ public class productos {
             parametro.setInt(2, getIdMarca());
             parametro.setString(3, getDescripcion());
             parametro.setString(4, getImagen());
-            parametro.setDouble(5, getPrecio_costo());
-            parametro.setDouble(6, getPrecio_venta());
+            parametro.setDouble(5, getPrecioCosto());
+            parametro.setDouble(6, getPrecioVenta());
             parametro.setInt(7, getExistencia());
             parametro.setInt(8, getIdProducto());
 
@@ -167,29 +166,27 @@ public class productos {
         } catch (SQLException ex) {
             System.err.println("Error al modificar producto: " + ex.getMessage());
         } finally {
-            try {
-                if (parametro != null) parametro.close();
-                conexionDB.cerrar_conexion();
-            } catch (SQLException e) {
-                System.err.println("Error al cerrar recursos: " + e.getMessage());
-            }
+            closeResources(parametro);
         }
         return retorno;
     }
 
     // Método para eliminar productos
-    public int eliminar(int getIdProducto) {
+    public int eliminar(int idProducto) {
         int retorno = 0;
+        PreparedStatement parametro = null;
         try {
-            PreparedStatement parametro;
             conexionDB = new conexion();
-            String query = "DELETE FROM productos WHERE idProducto = ?;";
             conexionDB.abrir_conexion();
-            parametro = (PreparedStatement)conexionDB.conectar_db.prepareStatement(query);
-            parametro.setInt(1, getIdProducto());
+
+            String query = "DELETE FROM productos WHERE idProducto = ?;";
+            parametro = conexionDB.conectar_db.prepareStatement(query);
+            parametro.setInt(1, idProducto);
             retorno = parametro.executeUpdate();
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+            System.err.println("Error al eliminar producto: " + ex.getMessage());
+        } finally {
+            closeResources(parametro);
         }
         return retorno;
     }
@@ -197,16 +194,20 @@ public class productos {
     // Método para leer productos
     public DefaultTableModel leer() {
         DefaultTableModel tabla = new DefaultTableModel();
+        PreparedStatement parametro = null;
+        ResultSet consulta = null;
+
         try {
-            conexionDB = new conexion();  
+            conexionDB = new conexion();
             conexionDB.abrir_conexion();
             
-            String query = "SELECT p.idProducto, p.producto, m.marca, m.idMarca, p.descripcion, p.imagen, p.precio_costo, p.precio_venta, p.existencia, p.fecha_ingreso " +
+            String query = "SELECT p.idProducto, p.producto, m.marca, m.idMarca, p.descripcion, p.imagen, p.precio_costo, p.precio_venta, p.existencia, fecha_ingreso " +
                            "FROM productos p " +
                            "INNER JOIN marcas m ON p.idMarca = m.idMarca " +
                            "ORDER BY p.idProducto DESC;";
 
-            ResultSet consulta = conexionDB.conectar_db.createStatement().executeQuery(query);
+            parametro = conexionDB.conectar_db.prepareStatement(query);
+            consulta = parametro.executeQuery();
 
             String encabezado[] = {"idProducto", "producto", "marca", "descripcion", "imagen", "precio_costo", "precio_venta", "existencia", "fecha_ingreso"};
             tabla.setColumnIdentifiers(encabezado);
@@ -223,10 +224,10 @@ public class productos {
                 datos[8] = consulta.getString("fecha_ingreso");
                 tabla.addRow(datos);
             }
-
-            conexionDB.cerrar_conexion();
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+            System.err.println("Error al leer productos: " + ex.getMessage());
+        } finally {
+            closeResources(consulta, parametro);
         }
         return tabla;
     }
@@ -257,15 +258,61 @@ public class productos {
                 System.out.println("Producto no encontrado con ID: " + this.idProducto);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println("Error al obtener datos del producto: " + e.getMessage());
         } finally {
-            try {
-                if (rs != null) rs.close();
-                if (stmt != null) stmt.close();
-                conexionDB.cerrar_conexion();
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
+            closeResources(rs, stmt);
+        }
+    }
+    
+    public String getNombreImagen(int idProducto) {
+        String nombreImagen = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conexionDB = new conexion();
+            conexionDB.abrir_conexion();
+            
+            String query = "SELECT imagen FROM productos WHERE idProducto = ?";
+            stmt = conexionDB.conectar_db.prepareStatement(query);
+            stmt.setInt(1, idProducto);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                nombreImagen = rs.getString("imagen");
+            } else {
+                System.out.println("Producto no encontrado con ID: " + idProducto);
             }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener nombre de la imagen: " + e.getMessage());
+        } finally {
+            closeResources(rs, stmt);
+        }
+        
+        return nombreImagen;
+    }
+
+    // Método para cerrar recursos
+    private void closeResources(PreparedStatement parametro) {
+        try {
+            if (parametro != null) {
+                parametro.close();
+            }
+            conexionDB.cerrar_conexion();
+        } catch (SQLException e) {
+            System.err.println("Error al cerrar recursos: " + e.getMessage());
+        }
+    }
+
+    private void closeResources(ResultSet consulta, PreparedStatement parametro) {
+        try {
+            if (consulta != null) {
+                consulta.close();
+            }
+            closeResources(parametro);
+        } catch (SQLException e) {
+            System.err.println("Error al cerrar recursos: " + e.getMessage());
         }
     }
 }
+
