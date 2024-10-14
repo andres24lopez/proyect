@@ -49,9 +49,6 @@
                         <label for="lbl_existencia"><b>Existencia</b></label>
                         <input type="number" name="txt_existencia" id="txt_existencia" class="form-control" required>
 
-                        <label for="lbl_fechaIngreso"><b>Fecha de Ingreso</b></label>
-                        <input type="date" name="txt_fecha_ingreso" id="txt_fecha_ingreso" class="form-control">
-                        
                         <br>
                         <button name="btn_agregar" id="btn_agregar" value="agregar" class="btn btn-primary btn-lg">Agregar</button>
                         <button name="btn_modificar" id="btn_modificar" value="modificar" class="btn btn-success btn-lg">Modificar</button>
@@ -92,7 +89,8 @@
                 out.println("<td>" + tabla.getValueAt(t, 5) + "</td>");
                 out.println("<td>" + tabla.getValueAt(t, 6) + "</td>");
                 out.println("<td>" + tabla.getValueAt(t, 7) + "</td>");
-                out.println("<td>" + tabla.getValueAt(t, 8) + "</td>"); // Asegúrate de que aquí estás accediendo a la columna correcta
+                out.println("<td>" + tabla.getValueAt(t, 8) + "</td>");
+                // Se eliminó la columna de Fecha de Ingreso
                 out.println("</tr>");
             }
             %>
@@ -114,9 +112,8 @@ function limpiar() {
     $("#txt_precio_costo").val('');
     $("#txt_precio_venta").val('');
     $("#txt_existencia").val('');
-    $("#txt_fecha_ingreso").val(''); // Limpiar el campo de fecha
     $('#file_imagen').prop('disabled', false).show(); 
-    $('#txt_imagen').hide(); 
+    $('#txt_imagen').hide();
     $('#img_preview').hide();
 }
 
@@ -130,10 +127,8 @@ $('#tbl_productos').on('click', 'tr', function(evt) {
     var precioVenta = target.find("td").eq(6).text(); // Precio venta
     var existencia = target.find("td").eq(7).text(); // Existencia
     var imagen = target.find("td img").attr('src'); // Obtener la URL de la imagen
-    var fechaIngreso = target.find("td").eq(8).text(); // Fecha ingreso
     
-    
-     // Imprimir detalles del producto en la consola
+    // Imprimir detalles del producto en la consola
     console.log("Producto seleccionado para modificar/eliminar:");
     console.log("ID Producto:", idProducto);
     console.log("Marca", idMarca);
@@ -143,7 +138,6 @@ $('#tbl_productos').on('click', 'tr', function(evt) {
     console.log("Precio Venta:", precioVenta);
     console.log("Existencia:", existencia);
     console.log("Imagen URL:", imagen);
-    console.log("Fecha de Ingreso:", fechaIngreso);
 
     $('#txt_idProducto').val(idProducto);
     $('#drop_marca').val(idMarca); // Asignar el valor de idMarca al dropdown
@@ -155,21 +149,9 @@ $('#tbl_productos').on('click', 'tr', function(evt) {
     $('#img_preview').attr('src', imagen).show();
     $('#txt_imagen').val(imagen);
     $('#file_imagen').prop('disabled', true).hide();
-    $('#txt_fecha_ingreso').val(fechaIngreso);
 
     $('#modal_producto').modal('show');
 });
-
-
-// Función para confirmar eliminación
-function confirmarEliminacion() {
-    if (confirm("¿Está seguro de que desea eliminar el producto: " + nombreProducto + "?")) {
-        console.log("Eliminando producto:", nombreProducto);
-        // Aquí podrías llamar a la lógica para eliminar el producto
-        $('#btn_eliminar').closest('form').submit(); // Enviar el formulario para realizar la eliminación
-    }
-}
-
 
 $('#file_imagen').change(function(e) {
     var reader = new FileReader();

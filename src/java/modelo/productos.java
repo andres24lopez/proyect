@@ -4,8 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import javax.swing.table.DefaultTableModel;
-import java.time.LocalDate; // Import para manejar fechas
-import java.sql.Date;       // Import para convertir fechas a SQL
+import java.sql.Date; // Import para convertir fechas a SQL
 
 public class productos {
     private int idProducto;
@@ -16,7 +15,6 @@ public class productos {
     private double precio_costo;
     private double precio_venta;
     private int existencia;
-    private String fecha_ingreso;  // Cambiado a LocalDate
     conexion conexionDB;
 
     public productos() {}
@@ -26,7 +24,7 @@ public class productos {
         this.idProducto = idProducto;
     }
 
-    public productos(int idProducto, String producto, int idMarca, String descripcion, String imagen, double precio_costo, double precio_venta, int existencia, String fecha_ingreso) {
+    public productos(int idProducto, String producto, int idMarca, String descripcion, String imagen, double precio_costo, double precio_venta, int existencia) {
         this.idProducto = idProducto;
         this.producto = producto;
         this.idMarca = idMarca;
@@ -35,10 +33,9 @@ public class productos {
         this.precio_costo = precio_costo;
         this.precio_venta = precio_venta;
         this.existencia = existencia;
-        this.fecha_ingreso = fecha_ingreso;
     }
 
-    public productos(String producto, int idMarca, String descripcion, String imagen, double precio_costo, double precio_venta, int existencia, String fecha_ingreso) {
+    public productos(String producto, int idMarca, String descripcion, String imagen, double precio_costo, double precio_venta, int existencia) {
         this.producto = producto;
         this.idMarca = idMarca;
         this.descripcion = descripcion;
@@ -46,16 +43,15 @@ public class productos {
         this.precio_costo = precio_costo;
         this.precio_venta = precio_venta;
         this.existencia = existencia;
-        this.fecha_ingreso = fecha_ingreso;
     }
-    public productos(String producto, int idMarca, String descripcion, double precio_costo, double precio_venta, int existencia, String fecha_ingreso) {
+
+    public productos(String producto, int idMarca, String descripcion, double precio_costo, double precio_venta, int existencia) {
         this.producto = producto;
         this.idMarca = idMarca;
         this.descripcion = descripcion;
         this.precio_costo = precio_costo;
         this.precio_venta = precio_venta;
         this.existencia = existencia;
-        this.fecha_ingreso = fecha_ingreso;
     }
 
     // Getters y Setters
@@ -123,14 +119,6 @@ public class productos {
         this.existencia = existencia;
     }
 
-    public String getFecha_ingreso() {
-        return fecha_ingreso;
-    }
-
-    public void setFecha_ingreso(String fecha_ingreso) {
-        this.fecha_ingreso = fecha_ingreso;
-    }
-
     // Método para agregar productos
     public int agregar() {
         String rutaImagen = "/admin/img_producto/";
@@ -140,9 +128,7 @@ public class productos {
             conexionDB = new conexion();
             conexionDB.abrir_conexion();
 
-
-
-            String query = "INSERT INTO productos (producto, idMarca, descripcion, imagen, precio_costo, precio_venta, existencia, fecha_ingreso) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+            String query = "INSERT INTO productos (producto, idMarca, descripcion, imagen, precio_costo, precio_venta, existencia) VALUES (?, ?, ?, ?, ?, ?, ?);";
             parametro = conexionDB.conectar_db.prepareStatement(query);
             parametro.setString(1, getProducto());
             parametro.setInt(2, getIdMarca());
@@ -151,7 +137,6 @@ public class productos {
             parametro.setDouble(5, getPrecio_costo());
             parametro.setDouble(6, getPrecio_venta());
             parametro.setInt(7, getExistencia());
-            parametro.setDate(8, Date.valueOf(getFecha_ingreso())); // Convertir LocalDate a SQL Date
             retorno = parametro.executeUpdate();
             conexionDB.cerrar_conexion();
         } catch (SQLException ex) {
@@ -167,15 +152,15 @@ public class productos {
             conexionDB = new conexion();
             conexionDB.abrir_conexion();
 
-            String query = "UPDATE productos SET producto = ?, idMarca = ?, descripcion = ?, precio_costo = ?, precio_venta = ?, existencia = ?, fecha_ingreso = ? WHERE idProducto = ?;";
+            String query = "UPDATE productos SET producto = ?, idMarca = ?, descripcion = ?, imagen = ?, precio_costo = ?, precio_venta = ?, existencia = ? WHERE idProducto = ?;";
             parametro = conexionDB.conectar_db.prepareStatement(query);
             parametro.setString(1, getProducto());
             parametro.setInt(2, getIdMarca());
             parametro.setString(3, getDescripcion());
-            parametro.setDouble(4, getPrecio_costo());
-            parametro.setDouble(5, getPrecio_venta());
-            parametro.setInt(6, getExistencia());
-            parametro.setString(7, getFecha_ingreso()); // Convertir LocalDate a SQL Date
+            parametro.setString(4, getImagen());
+            parametro.setDouble(5, getPrecio_costo());
+            parametro.setDouble(6, getPrecio_venta());
+            parametro.setInt(7, getExistencia());
             parametro.setInt(8, getIdProducto());
 
             retorno = parametro.executeUpdate();
@@ -225,7 +210,7 @@ public class productos {
 
             String encabezado[] = {"idProducto", "producto", "marca", "descripcion", "imagen", "precio_costo", "precio_venta", "existencia", "fecha_ingreso"};
             tabla.setColumnIdentifiers(encabezado);
-            String datos[] = new String[10];
+            String datos[] = new String[9];
             while (consulta.next()) {
                 datos[0] = consulta.getString("idProducto");
                 datos[1] = consulta.getString("producto");

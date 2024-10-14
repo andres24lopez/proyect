@@ -5,9 +5,8 @@
         <group>
             <file>file:/C:/Users/robin/Videos/Captures/Proyecto/web/index.jsp</file>
             <file>file:/C:/Users/robin/Videos/Captures/Proyecto/src/java/modelo/productos.java</file>
-            <file>file:/C:/Users/robin/Videos/Captures/Proyecto/src/java/controlador/sr_productos.java</file>
             <file>file:/C:/Users/robin/Videos/Captures/Proyecto/web/admin/Administrador/inventario.jsp</file>
-            <file>file:/C:/Users/robin/Videos/Captures/Proyecto/web/admin/Administrador/template_administrador.jsp</file>
+            <file>file:/C:/Users/robin/Videos/Captures/Proyecto/src/java/controlador/sr_productos.java</file>
         </group>
     </open-files>
 </project-private>
