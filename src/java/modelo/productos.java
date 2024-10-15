@@ -201,9 +201,9 @@ public class productos {
             conexionDB = new conexion();
             conexionDB.abrir_conexion();
             
-            String query = "SELECT p.idProducto, p.producto, m.marca, m.idMarca, p.descripcion, p.imagen, p.precio_costo, p.precio_venta, p.existencia, fecha_ingreso " +
+            String query = "SELECT p.idProducto, p.producto, m.marca, m.idMarca, p.descripcion, p.imagen, p.precio_costo, p.precio_venta, p.existencia, p.fecha_ingreso " +
                            "FROM productos p " +
-                           "INNER JOIN marcas m ON p.idMarca = m.idMarca " +
+                           "INNER JOIN marcas m ON p.idmarca = m.idMarca " +
                            "ORDER BY p.idProducto DESC;";
 
             parametro = conexionDB.conectar_db.prepareStatement(query);
