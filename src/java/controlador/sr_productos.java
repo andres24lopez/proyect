@@ -57,7 +57,7 @@ public class sr_productos extends HttpServlet {
                 if (producto.agregar() > 0) {
                     response.sendRedirect("inventario.jsp");
                 } else {
-                    out.println("<h1> xxxxxxx No se Ingresó xxxxxxxxxxxx </h1>");
+                    out.println("<h1>No se ingresó el producto</h1>");
                     out.println("<a href='index.jsp'>Regresar...</a>");
                 }
             }
@@ -69,7 +69,7 @@ public class sr_productos extends HttpServlet {
                 if (producto.modificar() > 0) {
                     response.sendRedirect("inventario.jsp?success=true");
                 } else {
-                    out.println("<h1> xxxxxxx No se Modificó xxxxxxxxxxxx </h1>");
+                    out.println("<h1>No se modificó el producto</h1>");
                     out.println("<a href='inventario.jsp'>Regresar...</a>");
                 }
             }
@@ -77,13 +77,36 @@ public class sr_productos extends HttpServlet {
             // Botón eliminar
             if ("eliminar".equals(action)) {
                 System.out.println("Se recibió la solicitud para eliminar.");
-                if (producto.eliminar(idP) > 0) {
-                    response.sendRedirect("inventario.jsp?success=true");
+                // Obtiene el ID del producto a eliminar
+                int idProducto = Integer.parseInt(request.getParameter("txt_idProducto"));
+
+                // Obtiene el nombre de la imagen desde la base de datos
+                String nombreImagen = producto.getNombreImagen(idProducto);
+
+                // Elimina el producto de la base de datos
+                if (producto.eliminar(idProducto) > 0) {
+                    // Define la ruta del archivo de imagen que deseas eliminar
+                    String uploadPath = getServletContext().getRealPath("/admin/img_producto") + File.separator + nombreImagen;
+                    File imagenFile = new File(uploadPath);
+
+                    // Verifica si el archivo existe y lo elimina
+                    if (imagenFile.exists()) {
+                        if (imagenFile.delete()) {
+                            System.out.println("Imagen eliminada: " + nombreImagen);
+                        } else {
+                            System.out.println("No se pudo eliminar la imagen: " + nombreImagen);
+                        }
+                    } else {
+                        System.out.println("El archivo no existe: " + nombreImagen);
+                    }
+
+                    response.sendRedirect("inventario.jsp");
                 } else {
-                    out.println("<h1> xxxxxxx No se Eliminó xxxxxxxxxxxx </h1>");
+                    out.println("<h1>No se eliminó el producto</h1>");
                     out.println("<a href='inventario.jsp'>Regresar...</a>");
                 }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("inventario.jsp?error=true");
@@ -104,7 +127,7 @@ public class sr_productos extends HttpServlet {
 
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet para manejar productos";
     }
 
     private String getFileName(Part filePart) {

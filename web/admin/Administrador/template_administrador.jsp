@@ -1,9 +1,11 @@
 <%@page import="java.sql.*" %>
 <%@page import="modelo.productos" %>
 <%@page import="modelo.Marca" %>
+<%@page import="modelo.Ventas" %>
 <%@page import="java.util.HashMap" %>
 <%@page import="javax.swing.table.DefaultTableModel" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 
 <!DOCTYPE html>
 <html>
@@ -13,17 +15,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <style>
+        /* Tu estilo CSS existente aquí */
         body {
             background-image: url('../../img/7.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            background-attachment: fixed; /* Mantiene el fondo fijo */
-            height: 100%; /* Asegura que el cuerpo tenga un 100% de altura */
+            background-attachment: fixed;
+            height: 100%;
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             padding: 20px;
-            margin: 0; /* Elimina el margen por defecto */
+            margin: 0;
         }
 
         .navbar {
@@ -32,44 +35,44 @@
         }
 
         .navbar-brand img {
-            width: 250px; /* Ajustar tamaño del logo */
+            width: 250px;
             height: auto;
         }
 
         /* Sidebar */
         .sidebar {
-            position: fixed; /* Mantiene la barra lateral fija */
+            position: fixed;
             top: 0;
             left: 0;
-            height: 100%; /* Altura completa */
-            width: 250px; /* Ancho de la barra lateral */
-            background-color: rgba(52, 58, 64, 0.9); /* Gris oscuro casi transparente */
+            height: 100%;
+            width: 250px;
+            background-color: rgba(52, 58, 64, 0.9);
             padding: 20px;
-            z-index: 1000; /* Asegura que esté por encima de otros elementos */
-            display: none; /* Ocultar por defecto */
-            overflow-y: auto; /* Habilita el scroll vertical */
-            overflow-x: hidden; /* Oculta el scroll horizontal para evitar desplazamiento lateral */
+            z-index: 1000;
+            display: none;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
 
         .sidebar h3 {
-            color: white; /* Color del título de la barra lateral */
+            color: white;
         }
 
         .sidebar .nav-link {
-            color: #ffffff; /* Color de los enlaces */
+            color: #ffffff;
             font-weight: bold;
-            margin: 5px 0; /* Espaciado entre enlaces */
+            margin: 5px 0;
         }
 
         .sidebar .nav-link:hover {
-            background-color: #495057; /* Color de fondo en hover */
-            color: #f8f9fa; /* Color del texto en hover */
+            background-color: #495057;
+            color: #f8f9fa;
             border-radius: 10px;
         }
 
         /* Contenido principal */
         .content {
-            margin-left: 260px; /* Deja espacio para la barra lateral */
+            margin-left: 260px;
             padding: 20px;
         }
 
@@ -80,60 +83,82 @@
         }
 
         .table {
-            background-color: white; /* Cambia el fondo de la tabla a blanco */
-            color: black; /* Cambia el texto de la tabla a negro para que sea legible */
+            background-color: white;
+            color: black;
         }
 
         .table-striped tbody tr:nth-of-type(odd) {
-            background-color: #f9f9f9; /* Color de fondo para filas impares (opcional) */
+            background-color: #f9f9f9;
         }
 
         .table th, .table td {
-            vertical-align: middle; /* Alineación vertical de las celdas */
-            border: 1px solid #dee2e6; /* Color de borde de las celdas */
+            vertical-align: middle;
+            border: 1px solid #dee2e6;
         }
 
         /* Icono del menú */
         .menu-icon {
-            font-size: 55px; /* Tamaño del icono de menú */
-            color: white; /* Color del icono */
-            cursor: pointer; /* Cambia el cursor al pasar por encima */
-            position: fixed; /* Fija el icono en la esquina superior izquierda */
-            z-index: 1100; /* Asegura que esté por encima del sidebar */
-            top: 20px; /* Espacio desde la parte superior */
-            left: 20px; /* Espacio desde la izquierda */
+            font-size: 55px;
+            color: white;
+            cursor: pointer;
+            position: fixed;
+            z-index: 1100;
+            top: 20px;
+            left: 20px;
         }
-        
+
         .navbar-brand img {
-            width: 13%; /* Ajustar el tamaño de la imagen */
-            height: auto; /* Mantener la proporción de la imagen */
-            margin: 0 80px 40px; /* Margen superior e inferior, margen izquierdo y derecho */
+            width: 13%;
+            height: auto;
+            margin: 0 80px 40px;
         }
-        
+
         h3 {
-            color: white; /* Cambia el color del texto */
-            font-size: 42px; /* Cambia el tamaño de la fuente */
-            font-weight: bold; /* Cambia el grosor de la fuente */
-            text-align: center; /* Centra el texto (opcional) */
-            margin: 10px 0; /* Margen superior e inferior (opcional) */
+            color: white;
+            font-size: 42px;
+            font-weight: bold;
+            text-align: center;
+            margin: 10px 0;
         }
-        
+
         .center-button {
-            display: block; /* Hace que el botón sea un bloque */
-            margin: 0 auto; /* Margen automático para centrar horizontalmente */
-            font-size: 30px; /* Tamaño de la letra */
-            font-weight: bold; /* Grosor de la letra */
-            color: white; /* Color de la letra */
-            background-color: #17a2b8; /* Color de fondo (el mismo que btn-info) */
+            display: block;
+            margin: 0 auto;
+            font-size: 30px;
+            font-weight: bold;
+            color: white;
+            background-color: #17a2b8;
         }
     </style>
+    <script>
+        let timeout; // Variable para rastrear el tiempo de inactividad
+        const timeoutDuration = 600000; // 10 minutos en milisegundos
+
+        // Función para redirigir al usuario a la página de inicio de sesión
+        function redirectToLogin() {
+            alert("Has estado inactivo durante 10 minutos. Se cerrará la sesión.");
+            window.location.href = "../../login.jsp"; // Cambia esto por la ruta de tu página de login
+        }
+
+        // Función para restablecer el temporizador de inactividad
+        function resetTimeout() {
+            clearTimeout(timeout);
+            timeout = setTimeout(redirectToLogin, timeoutDuration);
+        }
+
+        // Escucha eventos de actividad del usuario
+        window.onload = resetTimeout; // Restablece el temporizador al cargar la página
+        document.onmousemove = resetTimeout;
+        document.onkeypress = resetTimeout;
+        document.onclick = resetTimeout;
+    </script>
 </head>
 <body>
     <header>
-        <div class="menu-icon" onclick="toggleMenu()">&#9776;</div> <!-- Icono del menú -->
+        <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
         <a class="navbar-brand">
-                        <img src="../../img/as.png">
-                    </a>
+            <img src="../../img/as.png">
+        </a>
         <div class="sidebar">
             <nav class="nav flex-column">
                 <br><br><br>
@@ -169,4 +194,3 @@
         </div>
     </header>
 
- 
