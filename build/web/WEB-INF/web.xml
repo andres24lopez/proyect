@@ -12,6 +12,10 @@
         <servlet-name>sr_marca</servlet-name>
         <servlet-class>controlador.sr_marca</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>sr_compras</servlet-name>
+        <servlet-class>controlador.sr_compras</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>sr_productos</servlet-name>
         <url-pattern>/admin/Empleado/sr_productos</url-pattern>
@@ -25,5 +29,10 @@
     <servlet-mapping>
         <servlet-name>sr_marca</servlet-name>
         <url-pattern>/sr_marca</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>sr_compras</servlet-name>
+        <url-pattern>/admin/Empleado/sr_compras</url-pattern>
+        <url-pattern>/admin/Administrador/sr_compras</url-pattern>
     </servlet-mapping>
 </web-app>

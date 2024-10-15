@@ -2,6 +2,7 @@
 <%@page import="modelo.productos" %>
 <%@page import="modelo.Marca" %>
 <%@page import="modelo.Ventas" %>
+<%@page import="modelo.Compras" %>
 <%@page import="java.util.HashMap" %>
 <%@page import="javax.swing.table.DefaultTableModel" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
