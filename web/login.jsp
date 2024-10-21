@@ -124,7 +124,7 @@
 
                                         // Redirección según el rol
                                         if (role.equalsIgnoreCase("admin")) {
-                                            response.sendRedirect("admin/Administrador/inventario.jsp");
+                                            response.sendRedirect("admin/Administrador/Productos.jsp");
                                         } else if (role.equalsIgnoreCase("empleado")) {
                                             response.sendRedirect("admin/Empleado/admin.jsp");
                                         } else if (role.equalsIgnoreCase("cliente")) {
