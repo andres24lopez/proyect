@@ -1,17 +1,8 @@
-<%-- 
-    Document   : cuenta
-    Created on : 11/10/2024, 6:24:38â€¯p.Â m.
-    Author     : robin
---%>
+<%@ include file="template_administrador.jsp" %>    
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
-</html>
+
+    <h1>Bienvenido, <%= username %>!</h1>
+    <p>Has iniciado sesión exitosamente.</p>
+    <a href="cerrar.jsp">Cerrar sesión</a>
+
+<%@ include file="pie_administrador.jsp" %>
