@@ -10,13 +10,14 @@
                 <button type="button" name="btn_nuevo" id="btn_nuevo" class="btn btn-info" data-toggle="modal" data-target="#modal_puesto" onclick="limpiar()">Nuevo</button>
             </div>
         </div>
-        
+
         <!-- Columna derecha con Buscar e input centrado -->
         <div class="col-md-6 d-flex flex-column align-items-end">
             <h3>Buscar Puesto</h3>
             <div class="text-center">
                 <input type="text" id="buscar" name="buscar" placeholder="Buscar por ID Puesto" class="form-control d-inline-block" style="width: auto; display: inline;">
                 <button type="button" name="btn_buscar" id="btn_buscar" class="btn btn-primary" data-toggle="modal" data-target="#modal_buscarPuesto">Buscar</button>
+                <a href="empleados.jsp" class="btn btn-primary">Tabla Empleados</a>
             </div>
         </div>
     </div>
