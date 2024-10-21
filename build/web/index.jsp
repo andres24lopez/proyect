@@ -66,7 +66,7 @@
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
-            </button>
+            </button> 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
@@ -109,7 +109,9 @@
                 String precioVentaProducto = tabla.getValueAt(t, 6).toString();
         %>
         <div class="card">
-            <img src="<%= "img_producto/" + imagenProducto %>" alt="<%= nombreProducto %>">
+            
+            <img src="<%= request.getContextPath() + "/admin/img_producto/" + imagenProducto %>" alt="<%= nombreProducto %>">
+
             <h3><%= nombreProducto %></h3>
             <p><strong>Marca:</strong> <%= marcaProducto %></p>
             <p><%= descripcionProducto %></p>
