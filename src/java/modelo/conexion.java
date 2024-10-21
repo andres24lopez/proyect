@@ -24,7 +24,6 @@ public class conexion {
         try {
             Class.forName(jdbc);
             conectar_db = DriverManager.getConnection(urlconexion, user, password);
-            System.out.println("Conexion exitosa...");
         } catch (ClassNotFoundException | SQLException ex) {
             System.out.println("error al conectar base de datos: " + ex.getMessage());
         }
@@ -33,7 +32,6 @@ public class conexion {
     public void cerrar_conexion() {
         try {
                 conectar_db.close();
-                System.out.println("Conexion cerrada...");
         } catch (SQLException ex) {
             System.out.println("Error al cerrar base de datos: " + ex.getMessage());
         }

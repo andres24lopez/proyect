@@ -249,11 +249,6 @@ public class productos {
             if (rs.next()) {
                 this.producto = rs.getString("producto");
                 this.descripcion = rs.getString("descripcion");
-                
-                System.out.println("Producto a eliminar:");
-                System.out.println("ID: " + this.idProducto);
-                System.out.println("Nombre: " + this.producto);
-                System.out.println("Descripción: " + this.descripcion);
             } else {
                 System.out.println("Producto no encontrado con ID: " + this.idProducto);
             }

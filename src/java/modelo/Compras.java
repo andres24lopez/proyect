@@ -132,41 +132,44 @@ public class Compras {
         }
         return retorno;
     }
+// Método para leer compras
+public DefaultTableModel leerCompras() {
+    DefaultTableModel tabla = new DefaultTableModel();
+    PreparedStatement parametro = null;
+    ResultSet consulta = null;
 
-    // Método para leer compras
-    public DefaultTableModel leerCompras() {
-        DefaultTableModel tabla = new DefaultTableModel();
-        PreparedStatement parametro = null;
-        ResultSet consulta = null;
-
-        try {
-            conexionDB = new conexion();
-            conexionDB.abrir_conexion();
-            
-            String query = "SELECT idCompra, no_orden_compra, idproveedor, fecha_orden, fechaingreso FROM compras ORDER BY idCompra DESC;";
-            
-            parametro = conexionDB.conectar_db.prepareStatement(query);
-            consulta = parametro.executeQuery();
-
-            String encabezado[] = {"idCompra", "no_orden_compra", "idproveedor", "fecha_orden", "fechaingreso"};
-            tabla.setColumnIdentifiers(encabezado);
-            String datos[] = new String[5];
-            while (consulta.next()) {
-                datos[0] = consulta.getString("idCompra");
-                datos[1] = consulta.getString("no_orden_compra");
-                datos[2] = consulta.getString("idproveedor");
-                datos[3] = consulta.getString("fecha_orden");
-                datos[4] = consulta.getString("fechaingreso"); // Mostrar fechaingreso
-                tabla.addRow(datos);
-            }
-        } catch (SQLException ex) {
-            System.err.println("Error al leer compras: " + ex.getMessage());
-        } finally {
-            closeResources(consulta, parametro);
-        }
+    try {
+        conexionDB = new conexion();
+        conexionDB.abrir_conexion();
         
-        return tabla; // Retorna la tabla con los datos
+        String query = "SELECT cm.idCompra, cm.no_orden_compra, pv.idProveedore, pv.proveedor, cm.fecha_orden, cm.fechaingreso " +
+                       "FROM compras cm " +
+                       "INNER JOIN proveedores pv ON cm.idproveedor = pv.idProveedore " +  // Corregido idProveedor
+                       "ORDER BY cm.idCompra DESC;";  
+        
+        parametro = conexionDB.conectar_db.prepareStatement(query);
+        consulta = parametro.executeQuery();
+
+        String encabezado[] = {"idCompra", "no_orden_compra", "idProveedore", "fecha_orden", "fechaingreso"};
+        tabla.setColumnIdentifiers(encabezado);
+        String datos[] = new String[5];
+        while (consulta.next()) {
+            datos[0] = consulta.getString("idCompra");
+            datos[1] = consulta.getString("no_orden_compra");
+            datos[2] = consulta.getString("idProveedore");  // Corregido a 'proveedor'
+            datos[3] = consulta.getString("fecha_orden");
+            datos[4] = consulta.getString("fechaingreso");
+            tabla.addRow(datos);
+        }
+    } catch (SQLException ex) {
+        System.err.println("Error al leer compras: " + ex.getMessage());
+    } finally {
+        closeResources(consulta, parametro);
     }
+    
+    return tabla;
+}
+
 
     // Método para cerrar recursos
     private void closeResources(PreparedStatement parametro) {
