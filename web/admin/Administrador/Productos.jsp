@@ -61,9 +61,6 @@
                         <label for="lbl_precioCosto"><b>Precio Costo</b></label>
                         <input type="number" step="0.01" name="txt_precio_costo" id="txt_precio_costo" class="form-control" required>
                         
-                        <label for="lbl_precioVenta"><b>Precio Venta</b></label>
-                        <input type="number" step="0.01" name="txt_precio_venta" id="txt_precio_venta" class="form-control" required>
-                        
                         <label for="lbl_existencia"><b>Existencia</b></label>
                         <input type="number" name="txt_existencia" id="txt_existencia" class="form-control" required>
 
@@ -163,8 +160,7 @@
         </div>
     </div>
 </div>     
-        
-        
+                
         
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
