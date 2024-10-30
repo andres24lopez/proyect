@@ -1,5 +1,7 @@
+
+
 <%@ page import="javax.swing.table.DefaultTableModel" %>
-<%@ include file="template_administrador.jsp" %>
+<%@ include file="template_cliente.jsp" %>
 
 
 <div class="container">
@@ -73,7 +75,7 @@
                         </select>
                         
 <label for="lbl_idEmpleado"><b>Id Empleado</b></label> 
-    <input type="text" name="txt_idEmpleado" id="txt_idEmpleado" class="form-control" value="<%= idEmpleado %>" readonly>
+    <input type="text" name="txt_idEmpleado" id="txt_idEmpleado" class="form-control" value="" readonly>
     <br>
                         
                         <label for="lbl_idProducto"><b>ID Producto</b></label>
@@ -398,4 +400,4 @@ $('#tbl_ventas').on('click', 'tr', function(evt) {
     </script>
 </script>
 
-<%@ include file="pie_administrador.jsp" %>
+<%@ include file="pie_cliente.jsp" %>

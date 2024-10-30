@@ -126,9 +126,9 @@
                                         if (role.equalsIgnoreCase("admin")) {
                                             response.sendRedirect("admin/Administrador/Productos.jsp");
                                         } else if (role.equalsIgnoreCase("empleado")) {
-                                            response.sendRedirect("admin/Empleado/admin.jsp");
+                                            response.sendRedirect("admin/Empleados/Productos.jsp");
                                         } else if (role.equalsIgnoreCase("cliente")) {
-                                            response.sendRedirect("admin/cliente.jsp");
+                                            response.sendRedirect("index.jsp");
                                         }
 
                                         // Resetear intentos

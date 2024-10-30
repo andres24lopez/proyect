@@ -42,7 +42,7 @@
 
     try {
         // Consulta SQL para obtener los menús en orden jerárquico
-        String sql = "SELECT id_menu, nombre, padre_id, url, archivo FROM menu ORDER BY padre_id, id_menu";
+        String sql = "SELECT id_menu, nombre, padre_id, url, archivo FROM menu1 ORDER BY padre_id, id_menu";
         stmt = conn.prepareStatement(sql);
         rs = stmt.executeQuery();
 

@@ -25,18 +25,20 @@
         response.sendRedirect("../../login.jsp"); 
         return;
     }
-%>
 
-<%
     // Crear una instancia de la clase conexion
     conexion con = new conexion();
     con.abrir_conexion();
     Connection conn = con.conectar_db;
     PreparedStatement stmt = null;
+    PreparedStatement stmt1 = null;
     ResultSet rs = null;
+    ResultSet rs1 = null;
 
     // Mapa para almacenar el menú jerárquico
     HashMap<Integer, List<HashMap<String, Object>>> menuMap = new HashMap<>();
+    
+    int idEmpleado = 0;
 
     try {
         // Consulta SQL para obtener los menús en orden jerárquico
@@ -73,14 +75,31 @@
             }
         }
 
+        // Consulta SQL para obtener el ID del empleado basado en el nombre de usuario
+        String sql1 = "SELECT e.idEmpleado FROM users u INNER JOIN empleados e ON u.idEmpleado = e.idEmpleado WHERE u.username = ?";
+        stmt1 = conn.prepareStatement(sql1);
+        stmt1.setString(1, usuario.getUsername());
+        rs1 = stmt1.executeQuery();
+
+        if (rs1.next()) {
+            idEmpleado = rs1.getInt("idEmpleado");
+        }
+
     } catch (SQLException e) {
         e.printStackTrace();
     } finally {
-        if (rs != null) rs.close();
-        if (stmt != null) stmt.close();
+        try {
+            if (rs1 != null) rs1.close();
+            if (stmt1 != null) stmt1.close();
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         con.cerrar_conexion();
     }
 %>
+
 
 <!DOCTYPE html>
 <html>
