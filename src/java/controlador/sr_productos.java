@@ -29,7 +29,6 @@ public class sr_productos extends HttpServlet {
             int idMarca = Integer.parseInt(request.getParameter("drop_marca"));
             String descripcion = request.getParameter("txt_descripcion");
             double precioCosto = Double.parseDouble(request.getParameter("txt_precio_costo"));
-            double precioVenta = Double.parseDouble(request.getParameter("txt_precio_venta"));
             int existencia = Integer.parseInt(request.getParameter("txt_existencia"));
 
             // Crear objeto producto si se está agregando o modificando
@@ -40,7 +39,6 @@ public class sr_productos extends HttpServlet {
                     descripcion,
                     null, // Para agregar la imagen más tarde
                     precioCosto,
-                    precioVenta,
                     existencia
             );
 
@@ -55,10 +53,10 @@ public class sr_productos extends HttpServlet {
                 producto.setImagen(fileName); // Establecer el nombre de la imagen en el objeto
 
                 if (producto.agregar() > 0) {
-                    response.sendRedirect("inventario.jsp");
+                    response.sendRedirect("Productos.jsp");
                 } else {
                     out.println("<h1>No se ingresó el producto</h1>");
-                    out.println("<a href='index.jsp'>Regresar...</a>");
+                    out.println("<a href='Productos.jsp'>Regresar...</a>");
                 }
             }
 
@@ -67,10 +65,10 @@ public class sr_productos extends HttpServlet {
                 System.out.println("Se recibió la solicitud para modificar.");
                 // Solo se actualiza el objeto producto, no se guarda la imagen nuevamente
                 if (producto.modificar() > 0) {
-                    response.sendRedirect("inventario.jsp?success=true");
+                    response.sendRedirect("Productos.jsp?success=true");
                 } else {
                     out.println("<h1>No se modificó el producto</h1>");
-                    out.println("<a href='inventario.jsp'>Regresar...</a>");
+                    out.println("<a href='Productos.jsp'>Regresar...</a>");
                 }
             }
 
@@ -100,10 +98,10 @@ public class sr_productos extends HttpServlet {
                         System.out.println("El archivo no existe: " + nombreImagen);
                     }
 
-                    response.sendRedirect("inventario.jsp");
+                    response.sendRedirect("Productos.jsp");
                 } else {
                     out.println("<h1>No se eliminó el producto</h1>");
-                    out.println("<a href='inventario.jsp'>Regresar...</a>");
+                    out.println("<a href='Productos.jsp'>Regresar...</a>");
                 }
             }
 

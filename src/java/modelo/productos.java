@@ -23,33 +23,30 @@ public class productos {
         this.idProducto = idProducto;
     }
 
-    public productos(int idProducto, String producto, int idMarca, String descripcion, String imagen, double precio_costo, double precio_venta, int existencia) {
+    public productos(int idProducto, String producto, int idMarca, String descripcion, String imagen, double precio_costo, int existencia) {
         this.idProducto = idProducto;
         this.producto = producto;
         this.idMarca = idMarca;
         this.descripcion = descripcion;
         this.imagen = imagen;
         this.precio_costo = precio_costo;
-        this.precio_venta = precio_venta;
         this.existencia = existencia;
     }
 
-    public productos(String producto, int idMarca, String descripcion, String imagen, double precio_costo, double precio_venta, int existencia) {
+    public productos(String producto, int idMarca, String descripcion, String imagen, double precio_costo, int existencia) {
         this.producto = producto;
         this.idMarca = idMarca;
         this.descripcion = descripcion;
         this.imagen = imagen;
         this.precio_costo = precio_costo;
-        this.precio_venta = precio_venta;
         this.existencia = existencia;
     }
 
-    public productos(String producto, int idMarca, String descripcion, double precio_costo, double precio_venta, int existencia) {
+    public productos(String producto, int idMarca, String descripcion, double precio_costo,  int existencia) {
         this.producto = producto;
         this.idMarca = idMarca;
         this.descripcion = descripcion;
         this.precio_costo = precio_costo;
-        this.precio_venta = precio_venta;
         this.existencia = existencia;
     }
     
@@ -126,14 +123,17 @@ public class productos {
             conexionDB = new conexion();
             conexionDB.abrir_conexion();
 
+            // Calcular el precio de venta (25% más del precio costo)
+            double precioVentaCalculado = getPrecioCosto() * 1.25;
+
             String query = "INSERT INTO productos (producto, idMarca, descripcion, imagen, precio_costo, precio_venta, existencia) VALUES (?, ?, ?, ?, ?, ?, ?);";
             parametro = conexionDB.conectar_db.prepareStatement(query);
             parametro.setString(1, getProducto());
             parametro.setInt(2, getIdMarca());
             parametro.setString(3, getDescripcion());
             parametro.setString(4, getImagen());
-            parametro.setDouble(5, getPrecioCosto());
-            parametro.setDouble(6, getPrecioVenta());
+            parametro.setDouble(5, getPrecioCosto());  // Precio costo
+            parametro.setDouble(6, precioVentaCalculado);  // Precio venta calculado
             parametro.setInt(7, getExistencia());
             retorno = parametro.executeUpdate();
         } catch (SQLException ex) {
@@ -144,6 +144,7 @@ public class productos {
         return retorno;
     }
 
+
     public int modificar() {
         int retorno = 0;
         PreparedStatement parametro = null;
@@ -151,14 +152,17 @@ public class productos {
             conexionDB = new conexion();
             conexionDB.abrir_conexion();
 
+            // Calcular el precio de venta basado en el precio costo actualizado
+            double precioVentaCalculado = getPrecioCosto() * 1.25;
+
             String query = "UPDATE productos SET producto = ?, idMarca = ?, descripcion = ?, imagen = ?, precio_costo = ?, precio_venta = ?, existencia = ? WHERE idProducto = ?;";
             parametro = conexionDB.conectar_db.prepareStatement(query);
             parametro.setString(1, getProducto());
             parametro.setInt(2, getIdMarca());
             parametro.setString(3, getDescripcion());
             parametro.setString(4, getImagen());
-            parametro.setDouble(5, getPrecioCosto());
-            parametro.setDouble(6, getPrecioVenta());
+            parametro.setDouble(5, getPrecioCosto());  // Precio costo
+            parametro.setDouble(6, precioVentaCalculado);  // Precio venta recalculado
             parametro.setInt(7, getExistencia());
             parametro.setInt(8, getIdProducto());
 
@@ -232,6 +236,48 @@ public class productos {
         return tabla;
     }
 
+    
+    public DefaultTableModel leerPro() {
+        DefaultTableModel tabla = new DefaultTableModel();
+        PreparedStatement parametro = null;
+        ResultSet consulta = null;
+
+        try {
+            conexionDB = new conexion();
+            conexionDB.abrir_conexion();
+            
+            String query = "SELECT p.idProducto, p.producto, m.marca, m.idMarca, p.descripcion, p.imagen, p.precio_costo, p.precio_venta, p.existencia, p.fecha_ingreso " +
+                           "FROM productos p " +
+                           "INNER JOIN marcas m ON p.idmarca = m.idMarca " +
+                           "ORDER BY p.idProducto DESC;";
+
+            parametro = conexionDB.conectar_db.prepareStatement(query);
+            consulta = parametro.executeQuery();
+
+            String encabezado[] = {"idProducto", "producto", "marca", "descripcion", "imagen", "precio_costo", "precio_venta", "existencia", "fecha_ingreso"};
+            tabla.setColumnIdentifiers(encabezado);
+            String datos[] = new String[9];
+            while (consulta.next()) {
+                datos[0] = consulta.getString("idProducto");
+                datos[1] = consulta.getString("producto");
+                datos[2] = consulta.getString("marca");
+                datos[3] = consulta.getString("descripcion");
+                datos[4] = consulta.getString("imagen");
+                datos[5] = consulta.getString("precio_costo");
+                datos[6] = consulta.getString("precio_venta");
+                datos[7] = consulta.getString("existencia");
+                datos[8] = consulta.getString("fecha_ingreso");
+                tabla.addRow(datos);
+            }
+        } catch (SQLException ex) {
+            System.err.println("Error al leer productos: " + ex.getMessage());
+        } finally {
+            closeResources(consulta, parametro);
+        }
+        return tabla;
+    }
+    
+    
     // Método para obtener los datos del producto
     public void obtenerDatos() {
         PreparedStatement stmt = null;
