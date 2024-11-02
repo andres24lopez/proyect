@@ -1,10 +1,6 @@
 <%@ include file="template_cliente.jsp" %>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Sobre Nosotros</title>
-    <style>
+
+<style>
         /* Estilos generales */
         body {
             font-family: Arial, sans-serif;
@@ -91,8 +87,7 @@
             padding: 10px;
         }
     </style>
-</head>
-<body>
+    <body>
     <header>
         <h2>Sobre Nosotros</h2>
     </header>
@@ -101,7 +96,7 @@
     
     <h1 id="intex-title">Intex</h1>
     <video autoplay muted loop id="background-video">
-    <source src="c:\Users\ANDRES\Documents\practica por que si\imagenes\videof.mp4" type="video/mp4">
+    <source src="img/videof.mp4" type="video/mp4">
     Tu navegador no soporta la etiqueta de video.
   </video>
 
@@ -111,26 +106,26 @@
     <section id="Visión">
         <h2>Visión</h2>
         <p>Ser líderes en el mercado de soluciones de cómputo, reconocidos por nuestra calidad, innovación y compromiso con la satisfacción del cliente, impulsando el desarrollo tecnológico de nuestros usuarios y acompañándolos en su crecimiento.</p>
-        <img src="C:\Users\ANDRES\Documents\practica por que si\imagenes\vicion.png" alt="Ejemplo de imagen" class="custom-image">
+        <img src="img/vicion.png" alt="Ejemplo de imagen" class="custom-image">
     </section>
 
     <section id="Misión">
         <h2>Misión</h2>
         <p>Ofrecer productos de cómputo de alta calidad que satisfagan las necesidades de nuestros clientes, con un servicio excepcional y un enfoque en la innovación y confiabilidad. Nos comprometemos a brindar soluciones tecnológicas accesibles y efectivas que permitan a nuestros clientes alcanzar sus objetivos personales y profesionales.</p>
-        <img src=""img/micion.png" alt="Ejemplo de imagen" class="custom-image">
+        <img src="img/micion.png" alt="Ejemplo de imagen" class="custom-image">
     </section>
 
     <section id="Nosotros">
         <h2>Sobre Nosotros</h2>
         <p>Somos una empresa dedicada a la venta de productos de cómputo, especializándonos en computadoras de última generación y accesorios para mejorar la productividad y el rendimiento.</p>
         <p>Nuestro objetivo es ofrecer productos de calidad y brindar el mejor servicio al cliente.</p>
-        <img src="C:\Users\ANDRES\Documents\practica por que si\imagenes\nosotros.png" alt="Ejemplo de imagen" class="custom-image">
+        <img src="img/nosotros.png" alt="Ejemplo de imagen" class="custom-image">
     </section>
 
     <section id="ofrecemos">
         <h2>Qué ofrecemos</h2>
         <p>En nuestra empresa nos especializamos en ofrecer una amplia gama de productos de cómputo, desde computadoras de alta calidad hasta los accesorios necesarios para optimizar el rendimiento y la productividad de nuestros clientes. Nos enfocamos en brindar soluciones tecnológicas innovadoras y confiables que se adapten a las necesidades tanto de usuarios individuales como de empresas, siempre asegurando un servicio al cliente excepcional y productos de vanguardia.</p>
-        <img src="C:\Users\ANDRES\Documents\practica por que si\imagenes\ofrecemos.png" alt="Ejemplo de imagen" class="custom-image">
+        <img src="img/ofrecemos.png" alt="Ejemplo de imagen" class="custom-image">
     </section>
 
     <section id="contacto">
@@ -146,14 +141,11 @@
             También puedes seguirnos en nuestras redes sociales: 
             <a href="https://www.facebook.com/profile.php?id=61557031081940" class="custom-link" target="_blank">Facebook</a>, 
             <a href="https://www.youtube.com/@productostecnologicos502-kr7hd/shorts" class="custom-link" target="_blank">youtube</a> y 
-            <a href="https://www.instagram.com" class="custom-link" target="_blank">Instagram</a>.
+            <a href="https://www.instagram.com/productos121811/profilecard/?igsh=dnNtM21zZ2dhY3Jy" class="custom-link" target="_blank">Instagram</a>.
         </p>
    
     </section>
 
-    <footer>
-        <p>&copy; 2024 Tu Empresa de Cómputo. Todos los derechos reservados.</p>
-    </footer>
 </body>
-</html>
+
 <%@ include file="pie_cliente.jsp" %>
